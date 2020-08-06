@@ -28,6 +28,23 @@ void APawnBase::BeginPlay()
 	Super::BeginPlay();
 }
 
+void APawnBase::Rotate(FVector TargetLocation)
+{
+	FQuat CurrentRotation = FQuat(TurretMeshComponent->GetComponentRotation());
+	FVector TargetDirection = FVector(TargetLocation.X, TargetLocation.Y, TurretMeshComponent->GetComponentLocation().Z) - TurretMeshComponent->GetComponentLocation();
+	FQuat TargetRotation = FQuat(TargetDirection.Rotation());
+
+	TurretMeshComponent->SetWorldRotation(FMath::Lerp(CurrentRotation, TargetRotation, 0.1f));
+}
+
+void APawnBase::Fire()
+{
+}
+
+void APawnBase::Destruct()
+{
+}
+
 // Called every frame
 void APawnBase::Tick(float DeltaTime)
 {

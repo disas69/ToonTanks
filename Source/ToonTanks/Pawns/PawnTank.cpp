@@ -15,14 +15,24 @@ APawnTank::APawnTank()
 void APawnTank::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerController = Cast<APlayerController>(GetController());
 }
 
 void APawnTank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Rotate();
 	Move();
+	Turn();
+
+	if (PlayerController != nullptr)
+	{
+		FHitResult HitResult;
+		if (PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
+		{
+			Rotate(HitResult.ImpactPoint);
+		}
+	}
 }
 
 void APawnTank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -30,7 +40,8 @@ void APawnTank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APawnTank::ProcessMove);
-	PlayerInputComponent->BindAxis("Turn", this, &APawnTank::ProcessRotate);
+	PlayerInputComponent->BindAxis("Turn", this, &APawnTank::ProcessTurn);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APawnTank::Fire);
 }
 
 void APawnTank::ProcessMove(float Value)
@@ -59,8 +70,11 @@ void APawnTank::ProcessMove(float Value)
 	BaseMeshComponent->SetRelativeRotation(Rotation);
 }
 
-void APawnTank::ProcessRotate(float Value)
+void APawnTank::ProcessTurn(float Value)
 {
+	// Flip value if moving backwards
+	Value *= MoveDirection.X >= 0.f ? 1.f : -1.f;
+	
 	float Yaw = Value * RotateSpeed * GetWorld()->DeltaTimeSeconds;
 	RotateDirection = FMath::Lerp(RotateDirection, FQuat(FRotator(0.f, Yaw, 0.f)), Smoothing);
 
@@ -90,7 +104,13 @@ void APawnTank::Move()
 	AddActorLocalOffset(MoveDirection, true);
 }
 
-void APawnTank::Rotate()
+void APawnTank::Turn()
 {
 	AddActorLocalRotation(RotateDirection, true);
+}
+
+void APawnTank::Destruct()
+{
+	Super::Destruct();
+	// Hide
 }

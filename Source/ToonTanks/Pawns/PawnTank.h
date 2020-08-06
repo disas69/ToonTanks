@@ -25,6 +25,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Destruct() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -47,13 +48,14 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	float RotateTiltAngle = 10.f;
-	
+
+	APlayerController* PlayerController = nullptr;
 	FVector MoveDirection;
 	FQuat RotateDirection;
 
 	void ProcessMove(float Value);
-	void ProcessRotate(float Value);
+	void ProcessTurn(float Value);
 
 	void Move();
-	void Rotate();
+	void Turn();
 };

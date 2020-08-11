@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Pawn.h"
+#include "ToonTanks/Actors/ProjectileBase.h"
 #include "PawnBase.generated.h"
 
 UCLASS()
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AProjectileBase> ProjectileType;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

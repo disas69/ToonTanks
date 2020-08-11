@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Kismet/KismetMathLibrary.h"
 #include "PawnBase.h"
 
 // Sets default values
@@ -30,15 +30,24 @@ void APawnBase::BeginPlay()
 
 void APawnBase::Rotate(FVector TargetLocation)
 {
-	FQuat CurrentRotation = FQuat(TurretMeshComponent->GetComponentRotation());
-	FVector TargetDirection = FVector(TargetLocation.X, TargetLocation.Y, TurretMeshComponent->GetComponentLocation().Z) - TurretMeshComponent->GetComponentLocation();
-	FQuat TargetRotation = FQuat(TargetDirection.Rotation());
+	FVector TargetDirection = FVector(TargetLocation.X, TargetLocation.Y, GetActorLocation().Z) - GetActorLocation();
+	FRotator CurrentRotation = FRotator(0.f, TurretMeshComponent->GetComponentRotation().Yaw, 0.f);
+	FRotator TargetRotation = FRotator(0.f, TargetDirection.Rotation().Yaw, 0.f);
 
 	TurretMeshComponent->SetWorldRotation(FMath::Lerp(CurrentRotation, TargetRotation, 0.1f));
+	TurretMeshComponent->SetRelativeRotation(FRotator(0.f, TurretMeshComponent->GetRelativeRotation().Yaw, 0.f));
 }
 
 void APawnBase::Fire()
 {
+	if (ProjectileType != nullptr)
+	{
+		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+		FRotator SpawnRotator = ProjectileSpawnPoint->GetComponentRotation();
+		
+		AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileType, SpawnLocation, SpawnRotator);
+		Projectile->SetOwner(this);
+	}
 }
 
 void APawnBase::Destruct()

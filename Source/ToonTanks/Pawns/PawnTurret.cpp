@@ -44,7 +44,7 @@ void APawnTurret::CheckFireCondition()
 		FVector TankLocation = Tank->GetActorLocation();
 		if (FVector::Dist(TankLocation, GetActorLocation()) <= FireRadius)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+			Fire();
 		}
 	}
 }

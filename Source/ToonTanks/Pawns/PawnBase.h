@@ -22,6 +22,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Destruct();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -44,5 +45,4 @@ protected:
 
 	virtual void Rotate(FVector TargetLocation);
 	virtual void Fire();
-	virtual void Destruct();
 };

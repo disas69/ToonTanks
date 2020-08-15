@@ -2,6 +2,7 @@
 
 
 #include "HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -16,8 +17,28 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Health = DefaultHealth;
+	GameMode = Cast<ATanksGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 }
 
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* Causer)
 {
+	if (Damage == 0.f || Health <= 0.f)
+	{
+		return;
+	}
+
+	Health = FMath::Clamp(Health - Damage, 0.f, DefaultHealth);
+
+	UE_LOG(LogTemp, Warning, TEXT("Actor %s has been damaged, %f health left"), *GetOwner()->GetName(), Health);
+
+	if (Health <= 0.f)
+	{
+		if (GameMode != nullptr)
+		{
+			GameMode->ActorDestroyed(GetOwner());
+		}
+	}
 }

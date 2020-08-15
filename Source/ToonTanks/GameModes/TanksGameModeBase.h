@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ToonTanks/Pawns/PawnTank.h"
 #include "TanksGameModeBase.generated.h"
 
 UCLASS()
@@ -13,6 +14,9 @@ class TOONTANKS_API ATanksGameModeBase : public AGameModeBase
 
 public:
 	ATanksGameModeBase();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game Loop")
+	int32 StartDelay = 3;
 
 	void ActorDestroyed(AActor* Actor);
 
@@ -26,6 +30,10 @@ protected:
 	void GameOver(bool IsVictory);
 
 private:
+	APawnTank* Player;
+	int32 TargetTurrets = 0;
+
 	void HandleGameStart();
 	void HandleGameOver(bool IsVictory);
+	int32 GetTargetsCount() const;
 };

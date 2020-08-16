@@ -31,6 +31,11 @@ void AProjectileBase::BeginPlay()
 
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHit);
 	SetLifeSpan(LifeSpan);
+
+	if (LaunchSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+	}
 }
 
 void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
@@ -50,6 +55,11 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 	if (HitParticles != nullptr)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation());
+	}
+
+	if (HitSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 	}
 	
 	Destroy();

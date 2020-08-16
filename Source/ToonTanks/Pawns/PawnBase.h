@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	UParticleSystem* DestructionParticles = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	USoundBase* DestructionSound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AProjectileBase> ProjectileType;
 

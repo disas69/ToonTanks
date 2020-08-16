@@ -53,9 +53,14 @@ void APawnBase::Fire()
 
 void APawnBase::Destruct()
 {
-	if(DestructionParticles != nullptr)
+	if (DestructionParticles != nullptr)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, DestructionParticles, GetActorLocation());
+	}
+
+	if (DestructionSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DestructionSound, GetActorLocation());
 	}
 }
 

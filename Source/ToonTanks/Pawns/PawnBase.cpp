@@ -62,6 +62,11 @@ void APawnBase::Destruct()
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, DestructionSound, GetActorLocation());
 	}
+
+	if (DestructionCameraShake != nullptr)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(DestructionCameraShake);
+	}
 }
 
 // Called every frame

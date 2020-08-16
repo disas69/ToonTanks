@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	USoundBase* DestructionSound;
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<UCameraShake> DestructionCameraShake;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AProjectileBase> ProjectileType;
 

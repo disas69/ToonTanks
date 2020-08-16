@@ -18,7 +18,8 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	bool IsPlayerAlive() const;
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Destruct() override;
@@ -50,6 +51,8 @@ private:
 	float RotateTiltAngle = 10.f;
 
 	APlayerController* PlayerController = nullptr;
+	bool bIsPlayerAlive = true;
+
 	FVector MoveDirection;
 	FQuat RotateDirection;
 

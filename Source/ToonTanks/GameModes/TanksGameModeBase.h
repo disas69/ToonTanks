@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "ToonTanks/Pawns/PawnTank.h"
+#include "ToonTanks/PlayerControllers/PlayerControllerBase.h"
 #include "TanksGameModeBase.generated.h"
 
 UCLASS()
@@ -32,6 +33,7 @@ protected:
 private:
 	APawnTank* Player;
 	int32 TargetTurrets = 0;
+	APlayerControllerBase* PlayerController;
 
 	void HandleGameStart();
 	void HandleGameOver(bool IsVictory);

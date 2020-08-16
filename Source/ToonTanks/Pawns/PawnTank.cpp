@@ -17,6 +17,11 @@ void APawnTank::BeginPlay()
 	PlayerController = Cast<APlayerController>(GetController());
 }
 
+bool APawnTank::IsPlayerAlive() const
+{
+	return bIsPlayerAlive;
+}
+
 void APawnTank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -111,5 +116,9 @@ void APawnTank::Turn()
 void APawnTank::Destruct()
 {
 	Super::Destruct();
-	// Hide
+	
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+	
+	bIsPlayerAlive = false;
 }

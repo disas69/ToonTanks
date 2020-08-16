@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
 #include "TanksGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "ToonTanks/Pawns/PawnTurret.h"
 
 ATanksGameModeBase::ATanksGameModeBase()
@@ -13,6 +13,7 @@ void ATanksGameModeBase::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<APawnTank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	PlayerController = Cast<APlayerControllerBase>(UGameplayStatics::GetPlayerController(this, 0));
 	TargetTurrets = GetTargetsCount();
 
 	HandleGameStart();
@@ -23,6 +24,12 @@ void ATanksGameModeBase::ActorDestroyed(AActor* Actor)
 	if (Actor == Player)
 	{
 		Player->Destruct();
+
+		if (PlayerController != nullptr)
+		{
+			PlayerController->SetEnabled(false);
+		}
+		
 		HandleGameOver(false);
 	}
 	else
@@ -43,6 +50,16 @@ void ATanksGameModeBase::ActorDestroyed(AActor* Actor)
 void ATanksGameModeBase::HandleGameStart()
 {
 	GameStart();
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->SetEnabled(false);
+
+		FTimerHandle PlayerEnableHandle;
+		FTimerDelegate PlayerEnableDelegate = FTimerDelegate::CreateUObject(PlayerController, &APlayerControllerBase::SetEnabled, true);
+
+		GetWorld()->GetTimerManager().SetTimer(PlayerEnableHandle, PlayerEnableDelegate, StartDelay, false);
+	}
 }
 
 void ATanksGameModeBase::HandleGameOver(bool IsVictory)

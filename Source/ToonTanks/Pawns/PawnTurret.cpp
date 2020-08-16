@@ -31,7 +31,7 @@ void APawnTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Tank != nullptr && IsTargetInRange(Tank))
+	if (Tank != nullptr && Tank->IsPlayerAlive() && IsTargetInRange(Tank))
 	{
 		Rotate(Tank->GetActorLocation());
 	}
@@ -39,13 +39,9 @@ void APawnTurret::Tick(float DeltaTime)
 
 void APawnTurret::CheckFireCondition()
 {
-	if (Tank != nullptr)
+	if (Tank != nullptr && Tank->IsPlayerAlive() && IsTargetInRange(Tank))
 	{
-		FVector TankLocation = Tank->GetActorLocation();
-		if (FVector::Dist(TankLocation, GetActorLocation()) <= FireRadius)
-		{
-			Fire();
-		}
+		Fire();
 	}
 }
 

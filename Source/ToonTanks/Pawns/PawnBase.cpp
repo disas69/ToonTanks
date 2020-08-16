@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PawnBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -52,6 +53,10 @@ void APawnBase::Fire()
 
 void APawnBase::Destruct()
 {
+	if(DestructionParticles != nullptr)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DestructionParticles, GetActorLocation());
+	}
 }
 
 // Called every frame

@@ -50,8 +50,9 @@ void APawnTank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void APawnTank::ProcessMove(float Value)
 {
-	float X = Value * MoveSpeed * GetWorld()->DeltaTimeSeconds;
-	MoveDirection = FMath::Lerp(MoveDirection, FVector(X, 0.f, 0.f), Smoothing);
+	float DeltaTime = GetWorld()->DeltaTimeSeconds;
+	float X = Value * MoveSpeed * DeltaTime;
+	MoveDirection = FMath::Lerp(MoveDirection, FVector(X, 0.f, 0.f), Smoothing * DeltaTime);
 
 	// Update X Tilt
 	FRotator TiltRotator;
@@ -70,7 +71,7 @@ void APawnTank::ProcessMove(float Value)
 		TiltRotator = FRotator(0.f, 0.f, Rotator.Roll);
 	}
 
-	FQuat Rotation = FMath::Lerp(FQuat(Rotator), FQuat(TiltRotator), Smoothing);
+	FQuat Rotation = FMath::Lerp(FQuat(Rotator), FQuat(TiltRotator), Smoothing * DeltaTime);
 	BaseMeshComponent->SetRelativeRotation(Rotation);
 }
 
@@ -78,9 +79,10 @@ void APawnTank::ProcessTurn(float Value)
 {
 	// Flip value if moving backwards
 	Value *= MoveDirection.X >= 0.f ? 1.f : -1.f;
-	
-	float Yaw = Value * RotateSpeed * GetWorld()->DeltaTimeSeconds;
-	RotateDirection = FMath::Lerp(RotateDirection, FQuat(FRotator(0.f, Yaw, 0.f)), Smoothing);
+
+	float DeltaTime = GetWorld()->DeltaTimeSeconds;
+	float Yaw = Value * RotateSpeed * DeltaTime;
+	RotateDirection = FMath::Lerp(RotateDirection, FQuat(FRotator(0.f, Yaw, 0.f)), Smoothing * DeltaTime);
 
 	// Update Y Tilt
 	FRotator TiltRotator;
@@ -99,7 +101,7 @@ void APawnTank::ProcessTurn(float Value)
 		TiltRotator = FRotator(Rotator.Pitch, 0.f, 0.f);
 	}
 
-	FQuat Rotation = FMath::Lerp(FQuat(Rotator), FQuat(TiltRotator), Smoothing);
+	FQuat Rotation = FMath::Lerp(FQuat(Rotator), FQuat(TiltRotator), Smoothing * DeltaTime);
 	BaseMeshComponent->SetRelativeRotation(Rotation);
 }
 

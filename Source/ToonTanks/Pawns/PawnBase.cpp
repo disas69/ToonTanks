@@ -35,7 +35,7 @@ void APawnBase::Rotate(FVector TargetLocation)
 	FRotator CurrentRotation = FRotator(0.f, TurretMeshComponent->GetComponentRotation().Yaw, 0.f);
 	FRotator TargetRotation = FRotator(0.f, TargetDirection.Rotation().Yaw, 0.f);
 
-	TurretMeshComponent->SetWorldRotation(FMath::Lerp(CurrentRotation, TargetRotation, 0.1f));
+	TurretMeshComponent->SetWorldRotation(FMath::Lerp(CurrentRotation, TargetRotation, Smoothing * GetWorld()->GetDeltaSeconds()));
 	TurretMeshComponent->SetRelativeRotation(FRotator(0.f, TurretMeshComponent->GetRelativeRotation().Yaw, 0.f));
 }
 

@@ -49,6 +49,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AProjectileBase> ProjectileType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	float Smoothing = 0.1f;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
